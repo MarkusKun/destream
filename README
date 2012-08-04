@@ -1,0 +1,12 @@
+This tool can be used to split files that are woven into each other.
+
+Example: 
+AABAABAABAABAABAAB
+->
+AAAAAAAAAA
+BBBBB
+
+It was needed when a RAW audio files had two streams, each only having a few samples before switching to another stream. It is pretty much hardcoded to the parameters of a certain music game, yet it could be used for other stuff with slight modifications.
+
+This program ignores parameters given on the command line. It expects the input file to be names "SONG.RAW" and splits it into "out1.RAW" and "out2.RAW" with out1.RAW being the "A" part of the example above (containing twice as much information as the "B"-part)
+
