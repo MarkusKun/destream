@@ -26,7 +26,7 @@ int main(int argc, char* argv[]){
     inStream.close();
     cout << dataCounter << " bytes read" << endl;
   }
-  unsigned int sourceFileSize = inFile.size();
+  unsigned int sourceFileSize = inFile.size()-1;
   cout << "String contains " << sourceFileSize << " chars" << endl;
   
   std::ofstream outStream1;
@@ -45,22 +45,25 @@ int main(int argc, char* argv[]){
       exit(EXIT_FAILURE);
     }
   }
-  unsigned int samplesPerChunk=24585;
-  unsigned int chunkSize=4*samplesPerChunk; // 131072; // try one kilo
-  unsigned int getChunkSize = 2*chunkSize;
-  unsigned int chunkOffset=3*chunkSize; // start of chunk vs start of next chunk
+  unsigned int samplesPerChunk=24576;
+  unsigned int chunkSize=4*samplesPerChunk; 
+  unsigned int getChunkSize1 = 2*chunkSize;
+  unsigned int getChunkSize2 = 1*chunkSize;
   unsigned int startOffset=0*chunkSize;
   { // extracting
-    unsigned int currentOffset;
-    for (
-      currentOffset  = startOffset;
-      currentOffset  < sourceFileSize;
-      currentOffset += chunkOffset
-      )
-    {
-      std::string currentChunk = inFile.substr(currentOffset,getChunkSize);
-      std::cout << "0x" << std::hex << currentOffset << " -> 0x" << currentOffset+getChunkSize-1 << std::endl;
-      outStream1 << currentChunk;
+    unsigned int currentOffset=startOffset;
+    while (currentOffset < sourceFileSize){
+      cout << " " << std::dec << currentOffset;
+      cout << " -> " << std::dec << currentOffset+getChunkSize1-1 << std::flush;
+      std::string currentChunk1 = inFile.substr(currentOffset,getChunkSize1);
+      outStream1 << currentChunk1;
+      currentOffset += getChunkSize1;
+
+      cout << " " << currentOffset;
+      cout << " -> " << std::dec << currentOffset+getChunkSize2-1 << std::endl;
+      std::string currentChunk2 = inFile.substr(currentOffset,getChunkSize2);
+      outStream2 << currentChunk2;
+      currentOffset += getChunkSize2;
     }
   }
   outStream1.close();
